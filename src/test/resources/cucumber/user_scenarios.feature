@@ -80,3 +80,9 @@ Feature: Checking User Service
       }
     ]
     """
+    Scenario: 4 - Listing all the http operations supported by the service
+      When OPTIONS / is called
+      Then an http status of 200 is returned along with allow header:
+      """
+      GET,POST,DELETE,OPTIONS
+      """

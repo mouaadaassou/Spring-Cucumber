@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.io.UnsupportedEncodingException;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options;
 
 
 @CucumberContextConfiguration
@@ -79,5 +80,16 @@ public class ScenarioDefs {
                     JsonParser.parseString(actualResult.getResponse().getContentAsString()));
   }
 
+  @When("OPTIONS / is called")
+  public void options_is_called() throws Exception {
+    actualResult = mockMvc.perform(options("/")).andReturn();
+  }
 
-}
+  @Then("an http status of {int} is returned along with allow header:")
+  public void an_http_status_of_200_is_returned_along_with_allow_header$(int httpCode, String allowHeader) {
+    Assertions.assertEquals(httpCode, actualResult.getResponse().getStatus());
+    Assertions.assertEquals(allowHeader, actualResult.getResponse().getHeader("allow"));
+  }
+
+
+  }
