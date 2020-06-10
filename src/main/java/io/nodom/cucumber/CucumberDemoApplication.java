@@ -21,7 +21,7 @@ public class CucumberDemoApplication {
   @Bean
   public CommandLineRunner commandLineRunner(UserRepository userRepository) {
     return (args) -> {
-      List<UserEntity> users = IntStream.range(0, 10)
+      List<UserEntity> users = IntStream.range(1, 11)
           .mapToObj(index -> UserEntity.builder()
               .firstName("firstName-" + index)
               .lastName("lastName-" + index)

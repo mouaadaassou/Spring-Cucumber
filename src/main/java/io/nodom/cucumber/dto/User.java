@@ -17,4 +17,7 @@ public class User {
 
   @NotEmpty
   private String lastName;
+
+  @NotEmpty
+  private String email;
 }

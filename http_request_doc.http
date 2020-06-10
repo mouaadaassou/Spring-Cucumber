@@ -1,0 +1,19 @@
+POST http://localhost:8080
+Content-Type: Application/JSON
+-d
+
+{
+        "firstName": "firstName-10",
+        "lastName":"lastName-10",
+        "email":"firstName_10@gmail.com"
+}
+
+###
+
+GET http://localhost:8080/10
+
+###
+GET http://localhost:8080
+
+###
+OPTIONS http://localhost:8080

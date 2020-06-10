@@ -1,8 +1,6 @@
 package io.nodom.cucumber;
 
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-
 import com.google.gson.JsonParser;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -19,6 +17,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.io.UnsupportedEncodingException;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
 
 @CucumberContextConfiguration
 @RunWith(SpringRunner.class)
@@ -28,7 +30,6 @@ import org.springframework.test.web.servlet.MvcResult;
 public class ScenarioDefs {
 
   private final MockMvc mockMvc;
-  private final JsonParser jsonParser;
   private MvcResult actualResult;
 
   @Given("we have {int} user in the DB")
@@ -36,9 +37,19 @@ public class ScenarioDefs {
     // no-op
   }
 
+  @Given("we have {int} users in the DB")
+  public void we_have_users_in_the_DB(int numberOfUsersInDB) {
+    // no-ops
+  }
+
   @When("GET /{int} is called")
   public void get_is_called(int userId) throws Throwable {
     actualResult = mockMvc.perform(get("/" + userId)).andReturn();
+  }
+
+  @When("GET / is called")
+  public void get_all_is_Called() throws Exception {
+    actualResult = mockMvc.perform(get("/")).andReturn();
   }
 
   @Then("a user with httpCode {int} and response should be JSON:")
@@ -46,8 +57,8 @@ public class ScenarioDefs {
       throws Throwable {
     Assertions.assertEquals(actualResult.getResponse().getStatus(), httpCode);
     Assertions
-        .assertEquals(jsonParser.parse(docString),
-            jsonParser.parse(actualResult.getResponse().getContentAsString()));
+        .assertEquals(JsonParser.parseString(docString),
+            JsonParser.parseString(actualResult.getResponse().getContentAsString()));
   }
 
   @Then("an httpCode {int} and response should be JSON:")
@@ -55,8 +66,17 @@ public class ScenarioDefs {
       throws Throwable {
     Assertions.assertEquals(actualResult.getResponse().getStatus(), httpCode);
     Assertions
-        .assertEquals(jsonParser.parse(docString),
-            jsonParser.parse(actualResult.getResponse().getContentAsString()));
+        .assertEquals(JsonParser.parseString(docString),
+            JsonParser.parseString(actualResult.getResponse().getContentAsString()));
+  }
+
+  @Then("an httpCode {int} with response should be JSON:")
+  public void an_httpCode_and_response_should_be_JSON$(int httpCode, String docString)
+          throws UnsupportedEncodingException {
+    Assertions.assertEquals(actualResult.getResponse().getStatus(), httpCode);
+    Assertions
+            .assertEquals(JsonParser.parseString(docString),
+                    JsonParser.parseString(actualResult.getResponse().getContentAsString()));
   }
 
 
